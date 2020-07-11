@@ -5,3 +5,12 @@ export interface IParty {
   createAt: Date;
   updateAt: Date;
 }
+
+export interface ICreateParty {
+  name: string;
+}
+
+export interface IUpdateParty {
+  name: string;
+  score: number;
+}
