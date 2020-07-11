@@ -1,0 +1,56 @@
+version: "3.4"
+services:
+  # frontend:
+  #   build: ./frontend
+  #   container_name: "code-war-frontend"
+  #   volumes:
+  #     - ./frontend:/app
+  #   ports:
+  #     - "8080:8080"
+  api:
+    build: ./backend
+    container_name: "election-api"
+    command: npm run start:dev
+    volumes:
+      - ./backend:/usr/src/service
+      - ./backend/images:/usr/src/service/images
+      - /usr/src/service/node_modules
+    working_dir: /usr/src/service
+    ports:
+      - "3030:3030"
+    depends_on:
+      - db
+      - redis
+    environment:
+      WAIT_HOSTS: db:5432
+  nginx:
+    container_name: "election-nginx"
+    restart: always
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/log:/etc/nginx/log
+    depends_on:
+      # - frontend
+      - api
+  db:
+    build: ./postgresql
+    container_name: "election-db"
+    # restart: always
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=1234
+      # - POSTGRES_PASSWORD=MYQ6BxnPfZ7jEhGnuhWZWm4dcREhrZ8F8yWv8bTuVN92
+      - POSTGRES_USER=election
+      - POSTGRES_DB=election
+  redis:
+    image: "redis:4-alpine"
+    container_name: "election-redis"
+    command: redis-server --requirepass h7nVvFfG6F5U7SjmPmEWjDXHJrsjyUpq
+    ports:
+      - "6379:6379"
