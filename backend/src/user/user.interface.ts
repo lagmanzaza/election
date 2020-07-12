@@ -13,3 +13,9 @@ export interface CreateUser {
   password: string;
   role?: string;
 }
+
+export interface Query {
+  field: string;
+  operator: '=' | '<' | '>' | '!=' | 'like';
+  value: string;
+}

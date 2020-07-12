@@ -22,4 +22,10 @@ export class PartyController {
     const result = await this.partyService.findById(id);
     return result;
   }
+
+  @Delete(':id')
+  async deleteById(@Param('id') id: number) {
+    const result = await this.partyService.deleteById(id);
+    return result;
+  }
 }
