@@ -4,11 +4,11 @@ require('dotenv').config();
 export default {
   sign: (payload: Record<string, any>, expireDate?: string): string => {
     const expiresIn = expireDate || '7d';
-    return jwt.sign({ payload }, process.env.JWT_SECRET, {
+    return jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn,
     });
   },
-  verify: async (authorization: string) => {
+  verify: (authorization: string) => {
     try {
       if (authorization) {
         const token = authorization.replace('Bearer ', '');
