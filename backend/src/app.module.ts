@@ -7,10 +7,18 @@ import { PartyService } from './party/party.service';
 import { PartyController } from './party/party.controller';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
+import { VoteController } from './vote/vote.controller';
+import { VoteService } from './vote/vote.service';
 
 @Module({
   imports: [],
-  controllers: [AppController, UserController, PartyController, AuthController],
-  providers: [AppService, UserService, PartyService, AuthService],
+  controllers: [
+    AppController,
+    UserController,
+    PartyController,
+    AuthController,
+    VoteController,
+  ],
+  providers: [AppService, UserService, PartyService, AuthService, VoteService],
 })
 export class AppModule {}

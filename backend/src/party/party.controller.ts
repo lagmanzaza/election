@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { PartyService } from './party.service';
 import { CreatePartyDto } from './dto/create-party.dto';
 @Controller('parties')
@@ -8,6 +16,12 @@ export class PartyController {
   @Get()
   async findAll() {
     const result = await this.partyService.findAll();
+    return result;
+  }
+
+  @Patch(':id')
+  async updateById(@Param('id') id: number, @Body() data: CreatePartyDto) {
+    const result = await this.partyService.updateById(id, data);
     return result;
   }
 

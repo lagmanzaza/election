@@ -4,7 +4,7 @@ export interface IUser {
   password: string;
   createAt: Date;
   updateAt: Date;
-  voted: boolean;
+  isVoted: boolean;
   role: string;
 }
 

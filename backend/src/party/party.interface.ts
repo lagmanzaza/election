@@ -12,5 +12,4 @@ export interface ICreateParty {
 
 export interface IUpdateParty {
   name: string;
-  score: number;
 }

@@ -54,6 +54,27 @@ export class PartyService {
     return result[0];
   }
 
+  async increseScore(id: number, value: number) {
+    const result = await db('parties')
+      .where('partyId', '=', id)
+      .update({
+        score: db.raw(`score + ${value}`),
+      })
+      .returning('*');
+
+    const isNotUpdated = result.length === 0;
+    if (isNotUpdated) {
+      throw new HttpException(
+        {
+          message: 'party id not found',
+        },
+        404,
+      );
+    }
+
+    return { message: 'updated', ...result[0] };
+  }
+
   async deleteById(id: number) {
     const result = await db(this.tableName)
       .where('partyId', '=', id)

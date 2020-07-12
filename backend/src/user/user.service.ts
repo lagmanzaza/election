@@ -6,6 +6,14 @@ import db from '../knex';
 @Injectable()
 export class UserService {
   private readonly tableName = 'users';
+
+  async update(id: number, data: any): Promise<IUser> {
+    const result = await db('users')
+      .where('userId', '=', id)
+      .update({ ...data, updateAt: new Date() })
+      .returning('*');
+    return result[0];
+  }
   async create({ username, password }: CreateUser): Promise<IUser> {
     const userInfo = await db
       .select('userId')
@@ -36,7 +44,15 @@ export class UserService {
 
   async findById(id: number): Promise<IUser> {
     const result = await db
-      .select('userId', 'username', 'password', 'role', 'createAt', 'updateAt')
+      .select(
+        'userId',
+        'username',
+        'password',
+        'role',
+        'isVoted',
+        'createAt',
+        'updateAt',
+      )
       .from(this.tableName)
       .where('userId', '=', id);
 
@@ -55,7 +71,15 @@ export class UserService {
 
   async findByQuery(query: Query[]): Promise<IUser[]> {
     let baseQuery = db
-      .select('userId', 'username', 'password', 'role', 'createAt', 'updateAt')
+      .select(
+        'userId',
+        'username',
+        'password',
+        'role',
+        'isVoted',
+        'createAt',
+        'updateAt',
+      )
       .from(this.tableName);
 
     query.forEach(({ field, operator, value }) => {
