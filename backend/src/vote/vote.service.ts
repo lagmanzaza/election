@@ -1,15 +1,16 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { PartyService } from '../party/party.service';
+import { EventsGateway } from '../websocket/websocket.gateway';
+
 import db from '../knex';
-
 import * as crypto from 'crypto';
-
 @Injectable()
 export class VoteService {
   constructor(
     private readonly userService: UserService,
     private readonly partyService: PartyService,
+    private readonly io: EventsGateway,
   ) {}
 
   async vote(userId: number, partyId: number) {
@@ -38,7 +39,8 @@ export class VoteService {
       })
       .into('votes');
 
-    await this.partyService.increseScore(partyId, 1);
+    const partyInfo = await this.partyService.increseScore(partyId, 1);
+    this.io.server.emit('votes', partyInfo);
     return {
       message: 'voted',
       hash: hashVote,

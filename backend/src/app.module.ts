@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { EventsGateway } from './websocket/websocket.gateway';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserController } from './user/user.controller';
@@ -19,6 +20,13 @@ import { VoteService } from './vote/vote.service';
     AuthController,
     VoteController,
   ],
-  providers: [AppService, UserService, PartyService, AuthService, VoteService],
+  providers: [
+    AppService,
+    UserService,
+    PartyService,
+    AuthService,
+    VoteService,
+    EventsGateway,
+  ],
 })
 export class AppModule {}
