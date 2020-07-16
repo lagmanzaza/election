@@ -5,18 +5,12 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-@WebSocketGateway()
+@WebSocketGateway({ transports: ['websocket'] })
 export class EventsGateway {
   @WebSocketServer()
   server: Server;
-
-  handleConnection() {
-    console.log('connected');
-  }
-
   @SubscribeMessage('votes')
   findAll(@MessageBody() data: any): Object {
-    console.log(this.server);
     console.log(data);
     return {
       message: 'created',

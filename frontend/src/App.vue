@@ -1,20 +1,7 @@
 <template>
-  <RegisterComponent v-on:onRegister="onRegister" />
+  <router-view />
 </template>
 
 <script lang="ts">
-import RegisterComponent from "./components/Register-form.vue";
-export default {
-  components: {
-    RegisterComponent
-  },
-  setup() {
-    const onRegister = () => {
-      console.log("sss");
-    };
-    return {
-      onRegister
-    };
-  }
-};
+export default {};
 </script>
