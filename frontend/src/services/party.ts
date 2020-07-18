@@ -6,3 +6,17 @@ export const listParty = async () => {
   });
   return response.json();
 };
+
+export const vote = async (data: any) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BACKEND_URL}/votes`, {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+  return response.json();
+};

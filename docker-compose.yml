@@ -1,12 +1,12 @@
 version: "3.4"
 services:
-  # frontend:
+  # web:
   #   build: ./frontend
-  #   container_name: "code-war-frontend"
+  #   container_name: "election-frontend"
   #   volumes:
-  #     - ./frontend:/app
+  #     - ./frontend:/usr/src/service
   #   ports:
-  #     - "8080:8080"
+  #     - "3000:3000"
   api:
     build: ./backend
     container_name: "election-api"
@@ -33,7 +33,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/log:/etc/nginx/log
     depends_on:
-      # - frontend
+      # - web
       - api
   db:
     build: ./postgresql

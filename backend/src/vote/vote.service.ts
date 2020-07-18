@@ -24,9 +24,6 @@ export class VoteService {
         409,
       );
     }
-
-    await this.userService.update(userId, { isVoted: true });
-
     const hashVote = crypto
       .createHash('sha256')
       .update(`${userId}:${partyId}`)
@@ -40,6 +37,8 @@ export class VoteService {
       .into('votes');
 
     const partyInfo = await this.partyService.increseScore(partyId, 1);
+    await this.userService.update(userId, { isVoted: true });
+
     this.io.server.emit('votes', partyInfo);
     return {
       message: 'voted',

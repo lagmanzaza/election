@@ -1,11 +1,18 @@
 <template>
   <div class="container">
-    <CardComponent />
+    <!-- {{ state.parties[0] }} -->
+    <CardComponent
+      v-for="(value, index) in state.parties"
+      :partyId="value.partyId"
+      :score="value.score"
+      :partyName="value.name"
+      v-on:on-vote="onVote"
+    />
   </div>
 </template>
 <script lang="ts">
-import { onUnmounted } from "vue";
-import { listParty } from "../services/party";
+import { onUnmounted, watchEffect } from "vue";
+import { listParty, vote } from "../services/party";
 import CardComponent from "../components/Card.vue";
 import { state } from "../features/parties-state";
 import webSocket from "../services/websocket";
@@ -14,6 +21,7 @@ import {
   buildMessage,
   parseMessage
 } from "../utils/transform-websocket-message";
+
 export default {
   components: {
     CardComponent
@@ -22,24 +30,37 @@ export default {
     const socket = new WebSocket(
       `ws://${WS_URL}/socket.io/?EIO=3&transport=websocket`
     );
-    socket.onopen = function(event) {
-      console.log("websocket connect");
-    };
 
     onUnmounted(() => {
       socket.close();
-      console.log("unmounted");
     });
 
     socket.addEventListener("message", function(event) {
       console.log(parseMessage(event.data));
-    });
-    listParty().then(data => {
-      state.parties = data;
+      const response = parseMessage(event.data);
+      if (response.event === "votes") {
+        const partyId = response.data.partyId;
+        const partyIndex = state.parties.findIndex(
+          (val, index) => val.partyId === partyId
+        );
+
+        state.parties[partyIndex].score += 1;
+      }
     });
 
+    watchEffect(() => {
+      listParty().then(data => {
+        state.parties = data;
+      });
+    });
+
+    const onVote = async partyId => {
+      const data = await vote({ partyId });
+    };
+
     return {
-      state
+      state,
+      onVote
     };
   }
 };
