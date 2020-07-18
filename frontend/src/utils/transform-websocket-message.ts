@@ -3,11 +3,22 @@ export const buildMessage = (event: string, message: any | any[]) => {
 };
 
 export const parseMessage = (message: string) => {
-  const replaceData = 
+  const replaceData = message.replace(/42|0|40/, "");
+
+  if (!replaceData) {
+    return message;
+  }
+
   const parseData = JSON.parse(message.replace(/42|0|40/, ""));
-  console.log(parseData);
-  // const event = parseData[0];
-  // const data = parseData.filter((val: string, index: number) => index > 0);
-  // console.log(data);
-  return message;
+
+  if (!(parseData instanceof Array)) {
+    return parseData;
+  }
+
+  const event = parseData[0];
+  const data = parseData[1];
+  return {
+    event,
+    data
+  };
 };
